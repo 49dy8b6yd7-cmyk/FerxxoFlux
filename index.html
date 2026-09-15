@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090d">
+<meta name="description" content="A small, personal introduction from Dominique.">
+<title>Dominique</title>
+<style>
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  color: #f6f5fb;
+  background: #08090d;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { min-height: 100%; margin: 0; }
+
+body {
+  min-width: 320px;
+  background: #08090d;
+}
+
+button {
+  font: inherit;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 3px;
+}
+
+.app {
+  --primary: #9b7cff;
+  --secondary: #39d8ff;
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 30%),
+    radial-gradient(circle at 85% 75%, color-mix(in srgb, var(--secondary) 7%, transparent), transparent 30%),
+    #08090d;
+}
+
+.ambient {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .15;
+  pointer-events: none;
+}
+.ambient-one { background: var(--primary); top: -180px; right: -100px; }
+.ambient-two { background: var(--secondary); bottom: -220px; left: -160px; }
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+.topbar {
+  position: relative;
+  z-index: 2;
+  width: min(920px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: max(18px, env(safe-area-inset-top)) 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; letter-spacing: .02em; }
+.brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 16px var(--primary); }
+
+.privacy-pill {
+  color: #a6a4b1;
+  font-size: 11px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.035);
+  padding: 7px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(12px);
+}
+.privacy-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #77e4ad; margin-right: 6px; box-shadow: 0 0 8px #77e4ad; }
+
+.main {
+  position: relative;
+  z-index: 1;
+  width: min(720px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 8px 0 32px;
+  outline: none;
+}
+
+.progress-wrap { margin: 10px 0 30px; }
+.progress-meta { display: flex; justify-content: space-between; color: #777582; font-size: 10px; letter-spacing: .13em; font-weight: 700; margin-bottom: 8px; }
+.progress-track { height: 2px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: inherit; box-shadow: 0 0 10px color-mix(in srgb, var(--primary) 55%, transparent); transition: width .5s cubic-bezier(.2,.8,.2,1); }
+
+.screen { animation: enter .42s cubic-bezier(.2,.8,.2,1); }
+@keyframes enter { from { opacity: 0; transform: translateY(10px) scale(.992); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+.screen-inner { position: relative; padding: 12px 0 20px; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #a9a6b5;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.eyebrow-icon {
+  width: 28px; height: 28px; display: grid; place-items: center;
+  border: 1px solid rgba(155,124,255,.22);
+  border-radius: 9px; background: rgba(155,124,255,.07); color: var(--primary);
+}
+
+h1 {
+  max-width: 650px;
+  margin: 17px 0 24px;
+  font-size: clamp(39px, 9vw, 68px);
+  line-height: .99;
+  letter-spacing: -.045em;
+  font-weight: 760;
+}
+.gradient-text { background: linear-gradient(110deg, #fff, var(--primary), var(--secondary)); background-clip: text; color: transparent; }
+
+.copy {
+  max-width: 590px;
+  color: #b8b6c1;
+  font-size: clamp(16px, 4vw, 19px);
+  line-height: 1.62;
+}
+.copy p { margin: 0 0 14px; }
+.copy strong { color: #f5f2fa; }
+.copy blockquote {
+  margin: 22px 0;
+  color: #f7f5fb;
+  font-size: clamp(25px, 6vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -.025em;
+  border-left: 2px solid var(--primary);
+  padding-left: 17px;
+}
+.small-note { font-size: 14px; color: #85828f; }
+
+.status-badge {
+  width: fit-content;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  margin: -5px 0 20px;
+  border: 1px solid rgba(57,216,255,.16);
+  background: rgba(57,216,255,.045);
+  border-radius: 10px;
+  font-size: 10px; font-weight: 800; letter-spacing: .12em;
+  color: #c8f8ff;
+}
+.pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--secondary); box-shadow: 0 0 10px var(--secondary); }
+.status-live { color: var(--secondary); margin-left: 3px; opacity: .75; }
+
+.beat {
+  margin: 25px 0 28px;
+  padding: 16px 18px;
+  border-left: 2px solid var(--primary);
+  background: linear-gradient(90deg, rgba(155,124,255,.08), transparent);
+  border-radius: 0 13px 13px 0;
+}
+.beat strong, .beat span { display: block; }
+.beat strong { color: #fff; font-size: 17px; }
+.beat span { color: #85828f; margin-top: 4px; font-size: 14px; }
+
+.profile-card {
+  display: flex; align-items: center; gap: 15px;
+  padding: 16px;
+  margin: 0 0 22px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 18px;
+  background: rgba(255,255,255,.045);
+  box-shadow: 0 18px 60px rgba(0,0,0,.18);
+  backdrop-filter: blur(16px);
+}
+.avatar {
+  flex: 0 0 50px; width: 50px; height: 50px;
+  display: grid; place-items: center; border-radius: 15px;
+  background: linear-gradient(135deg, rgba(155,124,255,.25), rgba(57,216,255,.12));
+  border: 1px solid rgba(155,124,255,.3);
+  color: #fff; font-size: 20px; font-weight: 800;
+}
+.profile-card h2 { margin: 0 0 3px; font-size: 18px; }
+.subtitle { margin: 0 !important; font-size: 12px !important; color: #878491; line-height: 1.4 !important; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 20px 0; }
+.chip { padding: 7px 10px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.035); border-radius: 999px; color: #c1bec9; font-size: 11px; }
+.comedy-line, .smile {
+  padding: 15px 16px; margin-top: 18px;
+  border: 1px dashed rgba(155,124,255,.22);
+  border-radius: 14px; background: rgba(155,124,255,.045);
+  color: #8f8b9a; font-size: 14px;
+}
+.comedy-line strong { color: #ded9ea; }
+
+.hero-ask {
+  margin: 5px 0 26px;
+  max-width: 560px;
+  font-size: clamp(32px, 8vw, 53px);
+  line-height: 1.05;
+  font-weight: 750;
+  letter-spacing: -.04em;
+  color: #fff;
+}
+.no-pressure {
+  display: grid; gap: 9px;
+  margin: 24px 0 4px;
+  color: #9995a3; font-size: 13px;
+}
+.no-pressure span { display: flex; align-items: center; gap: 8px; }
+.no-pressure svg { color: var(--secondary); }
+
+.action { margin-top: 30px; }
+.btn {
+  width: 100%;
+  min-height: 56px;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn:active, .choice:active { transform: translateY(1px) scale(.995); }
+.btn-primary {
+  color: #0b0a10;
+  background: linear-gradient(110deg, #e7e0ff, var(--primary));
+  box-shadow: 0 12px 34px rgba(155,124,255,.18);
+  font-weight: 800;
+}
+.btn-secondary {
+  color: #eeeaf7;
+  background: rgba(255,255,255,.045);
+  border-color: rgba(255,255,255,.1);
+  font-weight: 700;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 15px 35px rgba(0,0,0,.2); }
+
+.choice-stack { display: grid; gap: 10px; margin-top: 27px; }
+.choice {
+  width: 100%;
+  min-height: 62px;
+  display: flex; align-items: center; gap: 12px;
+  text-align: left;
+  padding: 10px 13px;
+  color: #eeeaf4;
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+.choice:hover { border-color: rgba(155,124,255,.4); background: rgba(155,124,255,.06); transform: translateY(-1px); }
+.choice-icon {
+  width: 36px; height: 36px; flex: 0 0 36px;
+  display: grid; place-items: center; border-radius: 11px;
+  background: rgba(155,124,255,.09); color: var(--primary);
+}
+.choice-arrow { margin-left: auto; color: #6f6c78; }
+.choice.muted .choice-icon { color: #898591; background: rgba(255,255,255,.04); }
+.choice.muted { color: #b0adb7; }
+.contact-choice.disabled { opacity: .52; cursor: not-allowed; }
+.contact-copy { display: grid; gap: 3px; }
+.contact-copy small { color: #787581; font-size: 10px; }
+.locked { margin-left: auto; color: #5d5a65; }
+
+.selected-card {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-top: 24px; padding: 15px;
+  border-radius: 15px;
+  border: 1px solid rgba(57,216,255,.14);
+  background: rgba(57,216,255,.04);
+}
+.selected-check {
+  width: 30px; height: 30px; flex: 0 0 30px; display: grid; place-items: center;
+  border-radius: 9px; background: rgba(57,216,255,.1); color: var(--secondary);
+}
+.selected-card strong { font-size: 14px; color: #e9faff; }
+.selected-card p { margin: 4px 0 0; font-size: 12px; line-height: 1.5; color: #898791; }
+
+.back-button {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 18px; padding: 5px 0;
+  color: #797681; background: transparent; border: 0; cursor: pointer;
+  font-size: 12px;
+}
+.back-button:hover { color: #c5c1cd; }
+
+.footer-note {
+  margin-top: 13px; color: #66636e; text-align: center; font-size: 10px; line-height: 1.5;
+}
+.site-footer {
+  position: relative; z-index: 1;
+  width: min(720px, calc(100% - 32px)); margin: auto;
+  padding: 14px 0 max(22px, env(safe-area-inset-bottom));
+  display: flex; justify-content: center; gap: 7px; color: #55525e; font-size: 10px;
+}
+
+@media (min-width: 700px) {
+  .main { padding-top: 20px; }
+  .progress-wrap { margin-bottom: 42px; }
+  .screen-inner { padding: 16px 30px 30px; }
+  .profile-card { padding: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+@media (max-width: 430px) {
+  .topbar, .main, .site-footer { width: min(100% - 24px, 720px); }
+  .privacy-pill { font-size: 9px; padding: 6px 8px; }
+  .main { padding-bottom: 12px; }
+  .screen-inner { padding-top: 8px; }
+  h1 { margin-top: 14px; margin-bottom: 21px; }
+  .copy { font-size: 15.5px; line-height: 1.58; }
+  .site-footer { font-size: 9px; }
+}
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(() => {
+  const CONFIG = {
+    name: "Dominique",
+    subtitle: "Dad · Comedian · Perpetual work in progress",
+    primaryAccent: "#9b7cff",
+    secondaryAccent: "#39d8ff",
+    profile: {
+      intro: "I love making people laugh. I’m caring, curious, self-aware, and always trying to become a better version of myself.",
+      traits: ["Makes people laugh", "Actually listens", "Caring", "Self-aware", "Always learning"]
+    },
+    contact: {
+      // Add your real contact details here.
+      phone: "",
+      instagram: "",
+      snapchat: "",
+      otherContact: ""
+    }
+  };
+
+  const root = document.getElementById("root");
+  const storyScreens = ["intro","why","about","whyYou","ask"];
+  let screen = "intro";
+  let selectedContact = null;
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+
+  const icon = (name) => ({
+    sparkles:"✦", heart:"♡", user:"●", message:"◌", send:"➤",
+    check:"✓", arrow:"→", chevron:"›", back:"←", close:"×"
+  }[name] || "•");
+
+  function progress() {
+    const i = storyScreens.indexOf(screen);
+    const pct = ["contact","success","decline"].includes(screen) ? 100 : ((Math.max(0,i)+1)/5)*100;
+    const label = screen==="intro" ? "FIRST RUN" : screen==="decline" ? "NO HARD FEELINGS" : "A QUICK INTRO";
+    const count = screen==="intro" ? "01 / 05" : screen==="why" ? "02 / 05" : screen==="about" ? "03 / 05" : screen==="whyYou" ? "04 / 05" : screen==="ask" ? "05 / 05" : "• • •";
+    return `<div class="progress-wrap" aria-label="Progress ${Math.round(pct)} percent">
+      <div class="progress-meta"><span>${label}</span><span>${count}</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }
+
+  function shell({eyebrow, ico, title, body, action="", choices="", back="", footer="", status=""}) {
+    return `<div class="screen"><div class="screen-inner">
+      ${back}
+      <div class="eyebrow"><span class="eyebrow-icon">${icon(ico)}</span>${eyebrow}</div>
+      <h1>${title}</h1>
+      ${status}
+      <div class="copy">${body}</div>
+      ${choices}
+      ${action ? `<div class="action">${action}</div>` : ""}
+      ${footer ? `<div class="footer-note">${footer}</div>` : ""}
+    </div></div>`;
+  }
+
+  const primary = (label,target) => `<button class="btn btn-primary" data-go="${target}">${label} ${icon("arrow")}</button>`;
+  const secondary = (label,target) => `<button class="btn btn-secondary" data-go="${target}">${label}</button>`;
+  const back = () => `<button class="back-button" data-back aria-label="Go back">${icon("back")} Back</button>`;
+
+  function render() {
+    const style = `--primary:${CONFIG.primaryAccent};--secondary:${CONFIG.secondaryAccent};`;
+    let content = "";
+
+    if (screen==="intro") {
+      content = shell({
+        eyebrow:"A slightly unusual introduction", ico:"sparkles",
+        title:`Hey, I’m <span class="gradient-text">${esc(CONFIG.name)}.</span>`,
+        status:`<div class="status-badge"><span class="pulse"></span><span>FIRST RUN</span><span class="status-live">LIVE</span></div>`,
+        body:`<p>First things first…</p><p>I’ve never actually gotten to use this app before.</p><p>So I’m genuinely excited to see if this thing actually works.</p><p>And somehow, you’re my first test subject.</p><div class="beat"><strong>Don’t worry.</strong><span>That’s a compliment.</span></div>`,
+        action:primary("Okay, I’m listening","why"),
+        footer:"No account. No tracking. No pressure."
+      });
+    }
+
+    if (screen==="why") {
+      content = shell({
+        eyebrow:"The reason this exists", ico:"heart", title:"Why did I make this?",
+        body:`<p>I’m a little shy and awkward when I approach someone I’m interested in.</p><p>So I thought…</p><p>Why not give you a chance to get to know me a little better first?</p><p>I wanted to give you a reason to decide whether I’m even worth your time.</p>`,
+        action:primary("Tell me about you","about"), back:back()
+      });
+    }
+
+    if (screen==="about") {
+      const chips = CONFIG.profile.traits.map(x=>`<span class="chip">${esc(x)}</span>`).join("");
+      content = shell({
+        eyebrow:"A little context", ico:"user", title:"So… who am I?",
+        body:`<div class="profile-card"><div class="avatar"><span>${esc(CONFIG.name[0])}</span></div><div><h2>${esc(CONFIG.name)}</h2><p class="subtitle">${esc(CONFIG.subtitle)}</p></div></div><p>${esc(CONFIG.profile.intro)}</p><div class="chips">${chips}</div><div class="comedy-line">And apparently… <strong>I build apps when I’m nervous.</strong></div>`,
+        action:primary("Okay, Dominique. Why me?","whyYou"), back:back()
+      });
+    }
+
+    if (screen==="whyYou") {
+      content = shell({
+        eyebrow:"The honest part", ico:"heart", title:"So why did I give you this?",
+        body:`<p>Because I thought you were really pretty.</p><p>But that wasn’t the only reason.</p><p>You seemed interesting.</p><p>I’d rather take a chance and introduce myself than walk away wondering:</p><blockquote>“What if?”</blockquote><p class="small-note">I’m sure you haven’t gotten a pickup line like this before.</p>`,
+        action:primary("Okay… what’s the actual ask?","ask"), back:back()
+      });
+    }
+
+    if (screen==="ask") {
+      content = shell({
+        eyebrow:"No clever trick here", ico:"message", title:"The actual ask is simple.",
+        body:`<div class="hero-ask">I’d like to get to know you.</div><p>Maybe we text.</p><p>Maybe Snapchat.</p><p>Maybe Instagram.</p><p>Whatever you’re comfortable with.</p><div class="no-pressure"><span>${icon("check")} No pressure.</span><span>${icon("check")} No expectations.</span><span>${icon("check")} Just a chance to talk and see if we click.</span></div>`,
+        choices:`<div class="choice-stack">
+          <button class="choice" data-go="contact"><span class="choice-icon">${icon("heart")}</span><span>I’d like to talk</span><span class="choice-arrow">${icon("chevron")}</span></button>
+          <button class="choice" data-go="contact"><span class="choice-icon">${icon("sparkles")}</span><span>I’m curious</span><span class="choice-arrow">${icon("chevron")}</span></button>
+          <button class="choice muted" data-go="decline"><span class="choice-icon">${icon("close")}</span><span>Not interested, but this was pretty clever</span><span class="choice-arrow">${icon("chevron")}</span></button>
+        </div>`, back:back()
+      });
+    }
+
+    if (screen==="contact") {
+      const methods = [
+        ["phone","Text","message"],["instagram","Instagram","sparkles"],
+        ["snapchat","Snapchat","sparkles"],["otherContact","Something else","send"]
+      ];
+      const choices = methods.map(([key,label,ico])=>{
+        const configured = Boolean(CONFIG.contact[key].trim());
+        return `<button class="choice contact-choice ${configured?"":"disabled"}" data-contact="${key}" ${configured?"":"disabled"}>
+          <span class="choice-icon">${icon(ico)}</span><span class="contact-copy"><strong>${label}</strong>${configured?"":"<small>Not configured yet</small>"}</span>
+          ${configured?`<span class="choice-arrow">${icon("chevron")}</span>`:`<span class="locked">—</span>`}
+        </button>`;
+      }).join("");
+      content = shell({
+        eyebrow:"Your call", ico:"send", title:"How would you like to stay in touch?",
+        body:`<p>Pick whatever feels most comfortable. There’s no wrong answer.</p>`,
+        choices:`<div class="choice-stack">${choices}</div>`,
+        back:back(), footer:"Nothing is collected or stored by this page."
+      });
+    }
+
+    if (screen==="success") {
+      const labels={phone:"Text",instagram:"Instagram",snapchat:"Snapchat",otherContact:"Something else"};
+      const label=labels[selectedContact]||"That";
+      const value=selectedContact?CONFIG.contact[selectedContact]:"";
+      const has=value.trim();
+      const action=has
+        ? `<button class="btn btn-primary" data-open-contact>${selectedContact==="instagram"?"Continue to Instagram":selectedContact==="snapchat"?"Continue to Snapchat":selectedContact==="phone"?"Text Dominique":"Continue"} ${icon("arrow")}</button>`
+        : secondary("Start over","intro");
+      content = shell({
+        eyebrow:"Well… okay then", ico:"sparkles", title:"Well… this is going better than expected.",
+        body:`<p>Thanks for giving me a chance.</p><p>Whatever happens next, I’m glad I took the shot.</p><div class="selected-card"><span class="selected-check">${icon("check")}</span><div><strong>${label}</strong><p>${label} — good choice. I’ll let you decide what happens next.</p></div></div>`,
+        action, footer:has?"": "That contact method hasn’t been configured yet."
+      });
+    }
+
+    if (screen==="decline") {
+      content = shell({
+        eyebrow:"No hard feelings", ico:"heart", title:"Fair enough.",
+        body:`<p>You don’t owe me anything.</p><p>I just didn’t want to walk away without taking a chance.</p><p>Thanks for being the first person to try this ridiculous little app.</p><div class="smile">Honestly, I’m just glad the QR code worked.</div>`,
+        action:secondary("Back to the beginning","intro")
+      });
+    }
+
+    root.innerHTML = `<div class="app" style="${style}">
+      <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="grid-overlay"></div>
+      <header class="topbar"><div class="brand"><span class="brand-dot"></span><span>${esc(CONFIG.name)}</span></div><div class="privacy-pill"><span class="privacy-dot"></span>Private by design</div></header>
+      <main class="main" tabindex="-1">${progress()}<section class="screen-host" aria-live="polite">${content}</section></main>
+      <footer class="site-footer"><span>Made by ${esc(CONFIG.name)}</span><span>•</span><span>One weird introduction at a time.</span></footer>
+    </div>`;
+
+    root.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{screen=b.dataset.go;render();}));
+    root.querySelector("[data-back]")?.addEventListener("click",()=>{
+      const order=["intro","why","about","whyYou","ask","contact"];
+      const i=order.indexOf(screen); if(i>0){screen=order[i-1];render();}
+    });
+    root.querySelectorAll("[data-contact]").forEach(b=>b.addEventListener("click",()=>{
+      selectedContact=b.dataset.contact; screen="success"; render();
+    }));
+    root.querySelector("[data-open-contact]")?.addEventListener("click",()=>{
+      const method=selectedContact, value=CONFIG.contact[method];
+      let url=value;
+      if(method==="phone") url="sms:"+value.replace(/[^\d+]/g,"");
+      else if(method==="instagram") url=value.startsWith("http")?value:"https://instagram.com/"+value.replace(/^@/,"");
+      else if(method==="snapchat") url=value.startsWith("http")?value:"https://www.snapchat.com/add/"+value.replace(/^@/,"");
+      else if(!value.startsWith("http") && value.includes("@")) url="mailto:"+value;
+      window.location.assign(url);
+    });
+    root.querySelector("main")?.focus({preventScroll:true});
+    window.scrollTo({top:0,behavior:"instant"});
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
